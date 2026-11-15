@@ -72,10 +72,6 @@ echo "--- 3. Chuỗi CA --- / CA chain"
 if [ -r ca-chain.pem ]; then
     N=$(grep -c 'BEGIN CERTIFICATE' ca-chain.pem)
     LEAF_O=$(openssl x509 -in smime.crt -noout -subject 2>/dev/null | grep -o 'O = [^,]*' | head -1)
-    if grep -q "CA:TRUE" <(openssl crl2pkcs7 -nocrl -certfile ca-chain.pem 2>/dev/null | openssl pkcs7 -print_certs -text -noout 2>/dev/null); then
-        :
-    fi
-    HAS_LEAF=0
     openssl crl2pkcs7 -nocrl -certfile ca-chain.pem 2>/dev/null \
         | openssl pkcs7 -print_certs -noout 2>/dev/null \
         | grep '^subject' | while read -r line; do
