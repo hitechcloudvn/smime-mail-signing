@@ -21,19 +21,19 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Cài PHP
+      - name: Cài PHP / Set up PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
           extensions: openssl
           coverage: none
 
-      - name: Kiểm tra cú pháp
+      - name: Kiểm tra cú pháp / Lint syntax
         run: |
           find src -name '*.php' -print0 \
             | xargs -0 -n1 -P4 php -l
 
-      - name: Xác nhận extension openssl
+      - name: Xác nhận extension openssl / Verify openssl extension
         run: php -r 'exit(extension_loaded("openssl") ? 0 : 1);'
 
   shell-lint:
@@ -42,7 +42,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Kiểm tra cú pháp bash
+      - name: Kiểm tra cú pháp bash / Bash syntax check
         run: |
           for f in scripts/*.sh; do
             bash -n "$f" && echo "OK  $f"
@@ -55,39 +55,41 @@ jobs:
           severity: warning
 
   secret-scan:
-    name: Quét vật liệu mã hoá
+    name: Quét vật liệu mã hoá / Secret scan
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      - name: Chặn khoá riêng và chứng chỉ lọt vào repo
+      - name: Chặn khoá riêng và chứng chỉ lọt vào repo / Block keys and certificates
         run: |
           FOUND=$(find . -path ./.git -prune -o \
             \( -name '*.key' -o -name '*.pem' -o -name '*.pfx' \
                -o -name '*.p12' -o -name '*.crt' -o -name '*.p7b' \) -print)
           if [ -n "$FOUND" ]; then
-            echo "::error::Phát hiện file chứng chỉ/khoá trong repo:"
+            echo "::error::Phát hiện file chứng chỉ/khoá trong repo: / Certificate or key files found in the repo:"
             echo "$FOUND"
             exit 1
           fi
-          echo "Sạch — không có vật liệu mã hoá."
+          echo "Sạch — không có vật liệu mã hoá. / Clean — no cryptographic material."
 
-      - name: Chặn khối PRIVATE KEY trong mã nguồn
+      - name: Chặn khối PRIVATE KEY trong mã nguồn / Block PRIVATE KEY blocks in source
         run: |
-          if grep -rIl -- '-----BEGIN .*PRIVATE KEY-----' \
+          # -{5} = năm dấu gạch ngang; cách viết này không tự khớp vào chính nó.
+          # -{5} = five dashes; this spelling never matches the pattern text itself.
+          if grep -rIlE -- '-{5}BEGIN .*PRIVATE KEY-{5}' \
                --exclude-dir=.git . ; then
-            echo "::error::Phát hiện khối PRIVATE KEY trong file trên."
+            echo "::error::Phát hiện khối PRIVATE KEY trong file trên. / PRIVATE KEY block found in the file(s) above."
             exit 1
           fi
-          echo "Sạch — không có khối private key."
+          echo "Sạch — không có khối private key. / Clean — no private key blocks."
 
   docs:
-    name: Kiểm tra liên kết tài liệu
+    name: Kiểm tra liên kết tài liệu / Docs link check
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      - name: Kiểm tra liên kết nội bộ
+      - name: Kiểm tra liên kết nội bộ / Check internal links
         run: |
           STATUS=0
           while IFS= read -r line; do
@@ -96,7 +98,7 @@ jobs:
             dir=$(dirname "$file")
             target="$dir/$link"
             if [ ! -e "$target" ]; then
-              echo "::error file=$file::Liên kết hỏng -> $link"
+              echo "::error file=$file::Liên kết hỏng / Broken link -> $link"
               STATUS=1
             fi
           done < <(grep -roP '(?<=\]\()[^)#:]+\.md(?=\))' --include='*.md' . \

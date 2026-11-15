@@ -1,0 +1,117 @@
+name: Release
+
+# Phát hành bản release qua GitHub Actions — không build ở máy cục bộ.
+# Releases are produced by GitHub Actions — no local build.
+#
+# Cách chạy / How to run:
+#   - Thủ công / manually:  gh workflow run release.yml -f version=v1.0.0
+#   - Hoặc đẩy tag có thật / or push a real tag:  git tag -a v1.0.0 -m "Release v1.0.0" && git push origin v1.0.0
+# Chú ý: tag được workflow tạo ra bằng GITHUB_TOKEN sẽ KHÔNG kích hoạt lại workflow
+# (giới hạn của GitHub) — điều đó tránh chạy trùng.
+# Note: a tag pushed by GITHUB_TOKEN does NOT re-trigger workflows (GitHub limitation),
+# which conveniently prevents double runs.
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Phiên bản cần phát hành, ví dụ v1.0.0 / Version to release, e.g. v1.0.0'
+        required: true
+        type: string
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Đóng gói và phát hành / Package and release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Xác định phiên bản / Determine version
+        id: ver
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            V="${{ github.event.inputs.version }}"
+          else
+            V="${GITHUB_REF_NAME}"
+          fi
+          if ! printf '%s' "$V" | grep -qE '^v[0-9]+\.[0-9]+\.[0-9]+$'; then
+            echo "::error::Phiên bản phải có dạng vX.Y.Z / Version must look like vX.Y.Z — got '$V'"
+            exit 1
+          fi
+          echo "version=$V" >> "$GITHUB_OUTPUT"
+
+      - name: Bỏ qua nếu release đã tồn tại / Skip if release already exists
+        id: guard
+        env:
+          GH_TOKEN: ${{ github.token }}
+          V: ${{ steps.ver.outputs.version }}
+        run: |
+          if gh release view "$V" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+            echo "Release $V đã tồn tại — bỏ qua. / Release $V already exists — skipping."
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Tạo tag annotated / Create annotated tag (workflow_dispatch)
+        if: github.event_name == 'workflow_dispatch' && steps.guard.outputs.exists == 'false'
+        env:
+          V: ${{ steps.ver.outputs.version }}
+        run: |
+          if git rev-parse "$V" >/dev/null 2>&1; then
+            echo "Tag $V đã tồn tại cục bộ. / Local tag $V already exists."
+          else
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git tag -a "$V" -m "Release $V"
+          fi
+          git push origin "$V" || echo "Tag đã có trên remote. / Tag already on remote."
+
+      - name: Đóng gói / Package
+        if: steps.guard.outputs.exists == 'false'
+        env:
+          V: ${{ steps.ver.outputs.version }}
+        run: |
+          NAME="smime-mail-signing-$V"
+          mkdir -p dist
+          git archive --format=zip    -o "dist/$NAME.zip" HEAD
+          git archive --format=tar.gz -o "dist/$NAME.tar.gz" HEAD
+          (cd dist && sha256sum "$NAME.zip" "$NAME.tar.gz" > SHA256SUMS)
+          ls -l dist
+
+      - name: Trích ghi chú từ CHANGELOG / Extract notes from CHANGELOG
+        if: steps.guard.outputs.exists == 'false'
+        env:
+          V: ${{ steps.ver.outputs.version }}
+        run: |
+          VER_NUM="${V#v}"
+          awk -v ver="$VER_NUM" '
+            $0 ~ "^#+ \\[" ver "\\]" {flag=1}
+            flag && $0 ~ "^#+ \\[[0-9]" && $0 !~ "\\[" ver "\\]" {exit}
+            flag {print}
+          ' CHANGELOG.md > notes.md || true
+          if [ ! -s notes.md ]; then
+            printf 'Release %s\n\nXem CHANGELOG.md / See CHANGELOG.md\n' "$V" > notes.md
+          fi
+
+      - name: Tạo GitHub Release / Create GitHub Release
+        if: steps.guard.outputs.exists == 'false'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          V: ${{ steps.ver.outputs.version }}
+        run: |
+          gh release create "$V" \
+            --repo "$GITHUB_REPOSITORY" \
+            --title "S/MIME Mail Signing $V" \
+            --notes-file notes.md \
+            "dist/smime-mail-signing-$V.zip" \
+            "dist/smime-mail-signing-$V.tar.gz" \
+            dist/SHA256SUMS
