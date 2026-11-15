@@ -1,37 +1,37 @@
-name: Đề xuất tính năng
-description: Gợi ý cải tiến hoặc tính năng mới
+name: Đề xuất tính năng / Feature request
+description: Gợi ý cải tiến hoặc tính năng mới / Suggest an improvement or a new feature
 title: "[Feature] "
 labels: ["enhancement"]
 body:
   - type: textarea
     id: problem
     attributes:
-      label: Vấn đề đang gặp
-      description: Tính năng này giải quyết khó khăn gì trong vận hành thực tế
+      label: Vấn đề đang gặp / Problem
+      description: Tính năng này giải quyết khó khăn gì trong vận hành thực tế / What operational difficulty would this feature solve
     validations:
       required: true
 
   - type: textarea
     id: solution
     attributes:
-      label: Giải pháp đề xuất
+      label: Giải pháp đề xuất / Proposed solution
     validations:
       required: true
 
   - type: textarea
     id: alternatives
     attributes:
-      label: Phương án đã cân nhắc
+      label: Phương án đã cân nhắc / Alternatives considered
 
   - type: dropdown
     id: scope
     attributes:
-      label: Phạm vi
+      label: Phạm vi / Scope
       options:
         - Mail Provider (WHMCS)
-        - Addon giám sát (WHMCS)
+        - Addon giám sát (WHMCS) / Monitoring add-on (WHMCS)
         - Script
-        - Tài liệu
+        - Tài liệu / Documentation
         - HostBill
     validations:
       required: true

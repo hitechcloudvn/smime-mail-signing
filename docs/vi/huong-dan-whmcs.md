@@ -1,6 +1,8 @@
 # WHMCS — Cài đặt module ký S/MIME
 
-Đọc [CHUAN-BI-CHUNG-CHI.md](CHUAN-BI-CHUNG-CHI.md) (phần A–E) trước để có 3 file: `smime.crt`, `ca-chain.pem`, `smime-hb.key`.
+**Tiếng Việt** | [English](../en/whmcs-guide.md)
+
+Đọc [Chuẩn bị chứng chỉ](chuan-bi-chung-chi.md) (phần A–E) trước để có 3 file: `smime.crt`, `ca-chain.pem`, `smime-hb.key`.
 
 ---
 

@@ -1,32 +1,32 @@
 <?php
 /**
- * WHMCS Hooks — cảnh báo hạn chứng chỉ và widget trạng thái
+ * WHMCS Hooks — cảnh báo hạn chứng chỉ và widget trạng thái / WHMCS Hooks — certificate-expiry alerts and status widget
  *
  * @package     HiTechCloud S/MIME Mail Signing
  * @author      Pho Tue Software Solutions JSC <info@photuesoftware.com>
  * @copyright   Copyright (c) 2026 Pho Tue Software Solutions Joint Stock Company
  * @license     HiTechCloud Source-Available License (Non-Commercial) — see LICENSE
- * @link        https://github.com/hitechcloud-vietnam/smime-mail-signing
+ * @link        https://github.com/hitechcloudvn/smime-mail-signing
  * @version     1.0.0
  *
  * CẤM sử dụng thương mại, bán, bán lại hoặc phân phối lại phần mềm này.
  * Commercial use, resale, and redistribution are PROHIBITED.
- * Liên hệ info@photuesoftware.com để xin giấy phép thương mại.
+ * Liên hệ info@photuesoftware.com để xin giấy phép thương mại. / Contact info@photuesoftware.com for a commercial license.
  */
 
 /**
- * Đặt tại: modules/addons/smimemonitor/hooks.php
- * Chức năng:
+ * Đặt tại: modules/addons/smimemonitor/hooks.php / Place at: modules/addons/smimemonitor/hooks.php
+ * Chức năng: / Purpose:
  */
 
 if (!defined('WHMCS')) {
-    die('This file cannot be accessed directly');
+    die('Không thể truy cập file này trực tiếp / This file cannot be accessed directly');
 }
 
 use WHMCS\Database\Capsule;
 
 /**
- * Lấy cấu hình addon.
+ * Lấy cấu hình addon. / Get the addon configuration.
  */
 function smimemonitor_hook_settings()
 {
@@ -41,7 +41,7 @@ function smimemonitor_hook_settings()
 }
 
 /**
- * Số ngày còn lại của certificate. Trả về null nếu không đọc được.
+ * Số ngày còn lại của certificate. Trả về null nếu không đọc được. / Days left on the certificate. Returns null if it cannot be read.
  */
 function smimemonitor_hook_daysLeft(array $cfg)
 {
@@ -61,7 +61,7 @@ function smimemonitor_hook_daysLeft(array $cfg)
 }
 
 /**
- * Chạy hằng ngày: cảnh báo hết hạn + dọn log.
+ * Chạy hằng ngày: cảnh báo hết hạn + dọn log. / Runs daily: expiry warnings + log cleanup.
  */
 add_hook('DailyCronJob', 1, function ($vars) {
     $cfg = smimemonitor_hook_settings();
@@ -69,7 +69,7 @@ add_hook('DailyCronJob', 1, function ($vars) {
         return;
     }
 
-    // --- Dọn log cũ ---
+    // --- Dọn log cũ --- / --- Purge old logs ---
     $keepDays = (int) ($cfg['log_days'] ?? 90);
     if ($keepDays > 0) {
         try {
@@ -79,14 +79,14 @@ add_hook('DailyCronJob', 1, function ($vars) {
                     ->delete();
             }
         } catch (\Exception $e) {
-            // bỏ qua
+            // bỏ qua / ignore
         }
     }
 
-    // --- Cảnh báo hạn cert ---
+    // --- Cảnh báo hạn cert --- / --- Cert expiry warning ---
     $days = smimemonitor_hook_daysLeft($cfg);
     if ($days === null) {
-        logActivity('S/MIME Monitor: không đọc được certificate để kiểm tra hạn.');
+        logActivity('S/MIME Monitor: không đọc được certificate để kiểm tra hạn. / cannot read the certificate to check expiry.');
         return;
     }
 
@@ -95,7 +95,7 @@ add_hook('DailyCronJob', 1, function ($vars) {
         return;
     }
 
-    // Chỉ gửi ở các mốc cụ thể, tránh spam mỗi ngày.
+    // Chỉ gửi ở các mốc cụ thể, tránh spam mỗi ngày. / Send only at specific milestones to avoid daily spam.
     $milestones = [30, 14, 7, 3, 1, 0];
     if ($days > 0 && !in_array($days, $milestones, true)) {
         return;
@@ -103,22 +103,26 @@ add_hook('DailyCronJob', 1, function ($vars) {
 
     $to = trim((string) ($cfg['alert_email'] ?? ''));
     if ($to === '' || !filter_var($to, FILTER_VALIDATE_EMAIL)) {
-        logActivity('S/MIME Monitor: cert còn ' . $days . ' ngày nhưng chưa khai email nhận cảnh báo.');
+        logActivity('S/MIME Monitor: cert còn ' . $days . ' ngày nhưng chưa khai email nhận cảnh báo. / cert has ' . $days . ' days left but no alert email is configured.');
         return;
     }
 
     if ($days < 0) {
-        $subject = '[KHẨN] Chứng chỉ S/MIME đã hết hạn';
+        $subject = '[KHẨN] Chứng chỉ S/MIME đã hết hạn / [URGENT] S/MIME certificate has expired';
         $body = 'Chứng chỉ S/MIME đã hết hạn ' . abs($days) . ' ngày trước. '
-            . 'Mail gửi đi hiện không còn chữ ký hợp lệ. Cần gia hạn ngay.';
+            . 'Mail gửi đi hiện không còn chữ ký hợp lệ. Cần gia hạn ngay. '
+            . '/ The S/MIME certificate expired ' . abs($days) . ' days ago. '
+            . 'Outgoing mail no longer has a valid signature. Renew immediately.';
     } else {
-        $subject = '[Cảnh báo] Chứng chỉ S/MIME còn ' . $days . ' ngày';
+        $subject = '[Cảnh báo] Chứng chỉ S/MIME còn ' . $days . ' ngày / [Warning] S/MIME certificate expires in ' . $days . ' days';
         $body = 'Chứng chỉ S/MIME sẽ hết hạn sau ' . $days . ' ngày. '
-            . 'Vui lòng làm thủ tục gia hạn tại portal Sectigo.';
+            . 'Vui lòng làm thủ tục gia hạn tại portal Sectigo. '
+            . '/ The S/MIME certificate will expire in ' . $days . ' days. '
+            . 'Please renew via the Sectigo portal.';
     }
 
     $body .= "\n\nFile: " . ($cfg['cert_path'] ?? '');
-    $body .= "\nKiểm tra: Admin → Addons → S/MIME Monitor";
+    $body .= "\nKiểm tra: Admin → Addons → S/MIME Monitor / Check: Admin → Addons → S/MIME Monitor";
 
     try {
         $mail = new \WHMCS\Mail\Message();
@@ -127,14 +131,14 @@ add_hook('DailyCronJob', 1, function ($vars) {
             ->addRecipient('to', $to);
         $mail->send();
     } catch (\Exception $e) {
-        logActivity('S/MIME Monitor: gửi cảnh báo thất bại — ' . $e->getMessage());
+        logActivity('S/MIME Monitor: gửi cảnh báo thất bại — ' . $e->getMessage() . ' / failed to send the alert — ' . $e->getMessage());
     }
 
-    logActivity('S/MIME Monitor: cert còn ' . $days . ' ngày, đã gửi cảnh báo tới ' . $to);
+    logActivity('S/MIME Monitor: cert còn ' . $days . ' ngày, đã gửi cảnh báo tới ' . $to . ' / cert has ' . $days . ' days left, alert sent to ' . $to);
 });
 
 /**
- * Banner cảnh báo trên trang chủ admin.
+ * Banner cảnh báo trên trang chủ admin. / Warning banner on the admin home page.
  */
 add_hook('AdminHomeWidgets', 1, function () {
     return new SmimeMonitorWidget();
@@ -143,7 +147,7 @@ add_hook('AdminHomeWidgets', 1, function () {
 class SmimeMonitorWidget extends \WHMCS\Module\AbstractWidget
 {
     protected $title = 'S/MIME';
-    protected $description = 'Trạng thái chứng chỉ ký mail';
+    protected $description = 'Trạng thái chứng chỉ ký mail / Mail-signing certificate status';
     protected $weight = 60;
     protected $columns = 1;
     protected $cache = true;
@@ -166,7 +170,7 @@ class SmimeMonitorWidget extends \WHMCS\Module\AbstractWidget
                     ->where('sent_at', '>=', $since)->where('signed', 0)->count();
             }
         } catch (\Exception $e) {
-            // bỏ qua
+            // bỏ qua / ignore
         }
 
         return ['days' => $days, 'signed' => $signed, 'unsigned' => $unsigned];
@@ -178,26 +182,30 @@ class SmimeMonitorWidget extends \WHMCS\Module\AbstractWidget
 
         if ($days === null) {
             return '<div class="widget-content-padded">'
-                . '<span class="label label-danger">Lỗi</span> '
-                . 'Không đọc được certificate. Kiểm tra cấu hình addon.</div>';
+                . '<span class="label label-danger">Lỗi / Error</span> '
+                . 'Không đọc được certificate. Kiểm tra cấu hình addon. '
+                . '/ Cannot read the certificate. Check the addon configuration.</div>';
         }
 
         if ($days < 0) {
-            $badge = '<span class="label label-danger">Hết hạn</span>';
-            $text = 'Đã hết hạn ' . abs($days) . ' ngày trước.';
+            $badge = '<span class="label label-danger">Hết hạn / Expired</span>';
+            $text = 'Đã hết hạn ' . abs($days) . ' ngày trước. / Expired ' . abs($days) . ' days ago.';
         } elseif ($days <= 30) {
-            $badge = '<span class="label label-warning">Sắp hết hạn</span>';
-            $text = 'Còn ' . $days . ' ngày.';
+            $badge = '<span class="label label-warning">Sắp hết hạn / Expiring soon</span>';
+            $text = 'Còn ' . $days . ' ngày. / ' . $days . ' days left.';
         } else {
-            $badge = '<span class="label label-success">Bình thường</span>';
-            $text = 'Còn ' . $days . ' ngày.';
+            $badge = '<span class="label label-success">Bình thường / Normal</span>';
+            $text = 'Còn ' . $days . ' ngày. / ' . $days . ' days left.';
         }
 
         return '<div class="widget-content-padded">'
             . '<p>' . $badge . ' ' . $text . '</p>'
             . '<p style="margin:0;color:#888;font-size:12px;">7 ngày qua: '
             . (int) $data['signed'] . ' mail đã ký, '
-            . (int) $data['unsigned'] . ' không ký</p>'
+            . (int) $data['unsigned'] . ' không ký'
+            . ' / Last 7 days: '
+            . (int) $data['signed'] . ' signed, '
+            . (int) $data['unsigned'] . ' unsigned</p>'
             . '</div>';
     }
 }

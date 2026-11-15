@@ -1,6 +1,8 @@
 # HostBill — Cấu hình ký S/MIME
 
-Đọc [CHUAN-BI-CHUNG-CHI.md](CHUAN-BI-CHUNG-CHI.md) (phần A–E) trước để có 3 file: `smime.crt`, `ca-chain.pem`, `smime-hb.key`.
+**Tiếng Việt** | [English](../en/hostbill-guide.md)
+
+Đọc [Chuẩn bị chứng chỉ](chuan-bi-chung-chi.md) (phần A–E) trước để có 3 file: `smime.crt`, `ca-chain.pem`, `smime-hb.key`.
 
 ---
 
@@ -106,7 +108,7 @@ sudo -u www-data test -r /etc/smime/smime-hb.key && echo OK || echo CHAN
 namei -l /etc/smime/smime-hb.key
 ```
 
-Nếu bị chặn, xem mục E2 trong [CHUAN-BI-CHUNG-CHI.md](CHUAN-BI-CHUNG-CHI.md). Nhớ đổi quyền **cả thư mục**, không chỉ file.
+Nếu bị chặn, xem mục E2 trong [Chuẩn bị chứng chỉ](chuan-bi-chung-chi.md). Nhớ đổi quyền **cả thư mục**, không chỉ file.
 
 Kiểm tra `open_basedir` — panel thường giới hạn mỗi site chỉ đọc trong thư mục của nó:
 
@@ -149,12 +151,12 @@ var_dump((bool)openssl_x509_read(file_get_contents($d."smime.crt")));
 while ($e = openssl_error_string()) echo $e, PHP_EOL;'
 ```
 
-Cần `bool(true)` cả hai dòng. Nếu ở đây đã fail thì vấn đề nằm ngoài HostBill — quay lại phần E của [CHUAN-BI-CHUNG-CHI.md](CHUAN-BI-CHUNG-CHI.md).
+Cần `bool(true)` cả hai dòng. Nếu ở đây đã fail thì vấn đề nằm ngoài HostBill — quay lại phần E của [Chuẩn bị chứng chỉ](chuan-bi-chung-chi.md).
 
 Hoặc dùng script có sẵn:
 
 ```bash
-../scripts/smime-check.sh /etc/smime www-data
+../../scripts/smime-check.sh /etc/smime www-data
 ```
 
 ---

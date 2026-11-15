@@ -1,5 +1,7 @@
 # Xử lý lỗi S/MIME
 
+**Tiếng Việt** | [English](../en/troubleshooting.md)
+
 Tra theo thông báo lỗi. Mỗi mục gồm: nguyên nhân thật, cách xác minh, cách sửa.
 
 ---
@@ -216,7 +218,7 @@ Trường hợp cuối đáng chú ý: nếu mail server hoặc gateway chèn th
 ## Chẩn đoán tổng thể
 
 ```bash
-../scripts/smime-check.sh /duong/dan/thu-muc-smime
+../../scripts/smime-check.sh /duong/dan/thu-muc-smime
 ```
 
 Hoặc thủ công, chạy đúng cách module gọi:

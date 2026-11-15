@@ -1,11 +1,11 @@
 blank_issues_enabled: false
 contact_links:
-  - name: Báo lỗ hổng bảo mật
+  - name: Báo lỗ hổng bảo mật / Report a security vulnerability
     url: mailto:info@photuesoftware.com
-    about: Đừng mở issue công khai. Gửi email riêng với tiêu đề [SECURITY].
-  - name: Hỗ trợ khách hàng HiTechCloud
+    about: Đừng mở issue công khai. Gửi email riêng với tiêu đề [SECURITY]. / Do not open a public issue. Email us privately with subject [SECURITY].
+  - name: Hỗ trợ khách hàng HiTechCloud / HiTechCloud customer support
     url: https://my.hitechcloud.vn
-    about: Câu hỏi về dịch vụ, hạ tầng, hoặc cấp phép thương mại.
-  - name: Tài liệu triển khai
-    url: https://github.com/hitechcloud-vietnam/smime-mail-signing/tree/main/docs
-    about: Hướng dẫn đầy đủ từ tạo CSR đến cấu hình module.
+    about: Câu hỏi về dịch vụ, hạ tầng, hoặc cấp phép thương mại. / Questions about services, infrastructure, or commercial licensing.
+  - name: Tài liệu triển khai / Deployment documentation
+    url: https://github.com/hitechcloudvn/smime-mail-signing/tree/main/docs
+    about: Hướng dẫn đầy đủ từ tạo CSR đến cấu hình module. / Full guide from CSR creation to module configuration.

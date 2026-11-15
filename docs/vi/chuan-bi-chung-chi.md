@@ -1,5 +1,7 @@
 # Chuẩn bị chứng chỉ S/MIME
 
+**Tiếng Việt** | [English](../en/certificate-preparation.md)
+
 Từ tạo CSR đến khi có bộ ba file dùng được cho WHMCS hoặc HostBill.
 
 **Đọc tài liệu này trước**, rồi mới sang hướng dẫn của nền tảng bạn dùng.
@@ -300,9 +302,9 @@ Script kiểm tra: môi trường OpenSSL/PHP, thông tin và hạn cert, cấu 
 
 ## G. Bước tiếp theo
 
-- **HostBill** → [HUONG-DAN-HOSTBILL.md](HUONG-DAN-HOSTBILL.md)
-- **WHMCS** → [HUONG-DAN-WHMCS.md](HUONG-DAN-WHMCS.md)
-- **Gặp lỗi** → [XU-LY-LOI.md](XU-LY-LOI.md)
+- **HostBill** → [Hướng dẫn HostBill](huong-dan-hostbill.md)
+- **WHMCS** → [Hướng dẫn WHMCS](huong-dan-whmcs.md)
+- **Gặp lỗi** → [Xử lý lỗi](xu-ly-loi.md)
 
 ---
 

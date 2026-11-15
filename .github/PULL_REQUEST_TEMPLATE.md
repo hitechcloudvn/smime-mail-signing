@@ -1,34 +1,27 @@
-## Mô tả
+## Mô tả / Description
 
-<!-- Thay đổi này giải quyết vấn đề gì? -->
+<!-- Vấn đề mà PR này giải quyết / What problem does this PR solve? -->
 
-Liên quan issue: #
+## Thay đổi / Changes
 
-## Loại thay đổi
+-
+-
 
-- [ ] Sửa lỗi (không phá vỡ tương thích)
-- [ ] Tính năng mới (không phá vỡ tương thích)
-- [ ] Thay đổi phá vỡ tương thích
-- [ ] Cập nhật tài liệu
-- [ ] Refactor / dọn dẹp
+## Kiểm tra / Testing
 
-## Đã kiểm tra
+- [ ] `php -l` đạt với mọi file PHP / passes for every PHP file
+- [ ] `bash -n` đạt với cả hai script / passes for both scripts
+- [ ] Liên kết markdown trong docs đều trỏ tới file có thật / all markdown links in docs resolve
+- [ ] Không có khoá riêng, passphrase, hay file chứng chỉ nào bị commit / no private key, passphrase, or certificate file is committed
 
-- [ ] `php -l` không báo lỗi trên toàn bộ file PHP đã sửa
-- [ ] `bash -n` không báo lỗi trên script đã sửa
-- [ ] Đã thử nghiệm trên môi trường thật (ghi rõ phiên bản bên dưới)
-- [ ] Đã cập nhật tài liệu nếu thay đổi ảnh hưởng tới cách sử dụng
-- [ ] Đã cập nhật CHANGELOG.md
+## Loại PR / PR type
 
-M�i trường thử nghiệm:
+- [ ] Fix
+- [ ] Feature
+- [ ] Docs
+- [ ] Refactor
 
-## Bảo mật
+---
 
-- [ ] Không log passphrase, khoá riêng, hoặc nội dung chữ ký
-- [ ] Không thêm mật khẩu vào tham số dòng lệnh
-- [ ] Trường cấu hình chứa mật khẩu dùng `'Type' => 'password'`
-- [ ] Không commit file chứng chỉ hay khoá
-
-## Xác nhận giấy phép
-
-- [ ] Tôi đồng ý phần đóng góp này được cấp cho Công ty Cổ phần Giải pháp Phần mềm và Công nghệ Phổ Tuệ theo điều khoản trong [LICENSE](../LICENSE)
+> Bằng việc gửi PR này, bạn đồng ý đóng góp được cấp phép theo [giấy phép](https://github.com/hitechcloudvn/smime-mail-signing/blob/main/LICENSE) của dự án.
+> By submitting this PR you agree that your contribution is licensed under the project's [license](https://github.com/hitechcloudvn/smime-mail-signing/blob/main/LICENSE).

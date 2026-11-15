@@ -1,30 +1,30 @@
 <?php
 /**
- * WHMCS Addon — S/MIME Monitor
+ * WHMCS Addon — Giám sát S/MIME / WHMCS Addon — S/MIME Monitor
  *
  * @package     HiTechCloud S/MIME Mail Signing
  * @author      Pho Tue Software Solutions JSC <info@photuesoftware.com>
  * @copyright   Copyright (c) 2026 Pho Tue Software Solutions Joint Stock Company
  * @license     HiTechCloud Source-Available License (Non-Commercial) — see LICENSE
- * @link        https://github.com/hitechcloud-vietnam/smime-mail-signing
+ * @link        https://github.com/hitechcloudvn/smime-mail-signing
  * @version     1.0.0
  *
  * CẤM sử dụng thương mại, bán, bán lại hoặc phân phối lại phần mềm này.
  * Commercial use, resale, and redistribution are PROHIBITED.
- * Liên hệ info@photuesoftware.com để xin giấy phép thương mại.
+ * Liên hệ info@photuesoftware.com để xin giấy phép thương mại. / Contact info@photuesoftware.com for a commercial license.
  */
 
 /**
- * Cài đặt:
- *   1. Tạo thư mục: modules/addons/smimemonitor/
- *   2. Đặt file này tại: modules/addons/smimemonitor/smimemonitor.php
- *   3. Đặt file hooks.php cùng thư mục (cảnh báo cert sắp hết hạn)
- *   4. Admin → System Settings → Addon Modules → Activate
- * Yêu cầu: WHMCS 8.0+
+ * Cài đặt: / Installation:
+ *   1. Tạo thư mục: modules/addons/smimemonitor/ / 1. Create the directory: modules/addons/smimemonitor/
+ *   2. Đặt file này tại: modules/addons/smimemonitor/smimemonitor.php / 2. Place this file at: modules/addons/smimemonitor/smimemonitor.php
+ *   3. Đặt file hooks.php cùng thư mục (cảnh báo cert sắp hết hạn) / 3. Place hooks.php in the same directory (cert-expiry warnings)
+ *   4. Admin → System Settings → Addon Modules → Activate / 4. Admin → System Settings → Addon Modules → Activate
+ * Yêu cầu: WHMCS 8.0+ / Requirements: WHMCS 8.0+
  */
 
 if (!defined('WHMCS')) {
-    die('This file cannot be accessed directly');
+    die('Không thể truy cập file này trực tiếp / This file cannot be accessed directly');
 }
 
 use WHMCS\Database\Capsule;
@@ -33,44 +33,44 @@ function smimemonitor_config()
 {
     return [
         'name' => 'S/MIME Monitor',
-        'description' => 'Theo dõi hạn chứng chỉ và nhật ký mail ký S/MIME.',
+        'description' => 'Theo dõi hạn chứng chỉ và nhật ký mail ký S/MIME. / Track certificate expiry and the S/MIME-signed mail log.',
         'version' => '1.0',
         'author' => 'HiTechCloud',
         'fields' => [
             'cert_path' => [
-                'FriendlyName' => 'Đường dẫn Certificate',
+                'FriendlyName' => 'Đường dẫn Certificate / Certificate path',
                 'Type' => 'text',
                 'Size' => '60',
-                'Description' => 'Trùng với cấu hình trong Mail Provider',
+                'Description' => 'Trùng với cấu hình trong Mail Provider / Same as the Mail Provider configuration.',
             ],
             'key_path' => [
-                'FriendlyName' => 'Đường dẫn Private Key',
+                'FriendlyName' => 'Đường dẫn Private Key / Private key path',
                 'Type' => 'text',
                 'Size' => '60',
             ],
             'ca_path' => [
-                'FriendlyName' => 'Đường dẫn CA Chain',
+                'FriendlyName' => 'Đường dẫn CA Chain / CA chain path',
                 'Type' => 'text',
                 'Size' => '60',
             ],
             'warn_days' => [
-                'FriendlyName' => 'Cảnh báo trước (ngày)',
+                'FriendlyName' => 'Cảnh báo trước (ngày) / Warn before (days)',
                 'Type' => 'text',
                 'Size' => '5',
                 'Default' => '30',
-                'Description' => 'Gửi cảnh báo khi cert còn ít hơn số ngày này',
+                'Description' => 'Gửi cảnh báo khi cert còn ít hơn số ngày này / Send a warning when the cert has fewer days than this.',
             ],
             'alert_email' => [
-                'FriendlyName' => 'Email nhận cảnh báo',
+                'FriendlyName' => 'Email nhận cảnh báo / Alert recipient email',
                 'Type' => 'text',
                 'Size' => '40',
             ],
             'log_days' => [
-                'FriendlyName' => 'Giữ log (ngày)',
+                'FriendlyName' => 'Giữ log (ngày) / Keep logs (days)',
                 'Type' => 'text',
                 'Size' => '5',
                 'Default' => '90',
-                'Description' => 'Log cũ hơn sẽ bị xoá tự động',
+                'Description' => 'Log cũ hơn sẽ bị xoá tự động / Older logs are purged automatically.',
             ],
         ],
     ];
@@ -91,23 +91,27 @@ function smimemonitor_activate()
                 $t->string('error', 500)->nullable();
             });
         }
-        return ['status' => 'success', 'description' => 'Đã tạo bảng mod_smime_log.'];
+        return ['status' => 'success', 'description' => 'Đã tạo bảng mod_smime_log. / Table mod_smime_log created.'];
     } catch (\Exception $e) {
-        return ['status' => 'error', 'description' => 'Lỗi tạo bảng: ' . $e->getMessage()];
+        return [
+            'status' => 'error',
+            'description' => 'Lỗi tạo bảng: ' . $e->getMessage()
+                . ' / Error creating table: ' . $e->getMessage(),
+        ];
     }
 }
 
 function smimemonitor_deactivate()
 {
-    // Giữ nguyên bảng log để không mất dữ liệu khi tạm tắt module.
+    // Giữ nguyên bảng log để không mất dữ liệu khi tạm tắt module. / Keep the log table so no data is lost while the module is temporarily off.
     return [
         'status' => 'success',
-        'description' => 'Đã tắt module. Bảng mod_smime_log vẫn được giữ lại.',
+        'description' => 'Đã tắt module. Bảng mod_smime_log vẫn được giữ lại. / Module disabled. Table mod_smime_log is kept.',
     ];
 }
 
 /**
- * Đọc thông tin chứng chỉ.
+ * Đọc thông tin chứng chỉ. / Read certificate information.
  *
  * @return array
  */
@@ -127,17 +131,17 @@ function smimemonitor_certInfo(array $vars)
 
     $certPath = trim((string) ($vars['cert_path'] ?? ''));
     if ($certPath === '') {
-        $result['messages'][] = ['danger', 'Chưa khai đường dẫn certificate trong cấu hình addon.'];
+        $result['messages'][] = ['danger', 'Chưa khai đường dẫn certificate trong cấu hình addon. / Certificate path not set in the addon configuration.'];
         return $result;
     }
     if (!is_readable($certPath)) {
-        $result['messages'][] = ['danger', 'Không đọc được certificate: ' . $certPath];
+        $result['messages'][] = ['danger', 'Không đọc được certificate: ' . $certPath . ' / Cannot read certificate: ' . $certPath];
         return $result;
     }
 
     $cert = @openssl_x509_read(file_get_contents($certPath));
     if ($cert === false) {
-        $result['messages'][] = ['danger', 'File certificate không hợp lệ.'];
+        $result['messages'][] = ['danger', 'File certificate không hợp lệ. / Invalid certificate file.'];
         return $result;
     }
 
@@ -154,30 +158,33 @@ function smimemonitor_certInfo(array $vars)
         }
     }
 
-    // Trạng thái hạn
+    // Trạng thái hạn / Expiry status
     if ($result['days_left'] < 0) {
-        $result['messages'][] = ['danger', 'Certificate ĐÃ HẾT HẠN ngày ' . $result['valid_to']];
+        $result['messages'][] = ['danger', 'Certificate ĐÃ HẾT HẠN ngày ' . $result['valid_to']
+            . ' / Certificate EXPIRED on ' . $result['valid_to']];
     } elseif ($result['days_left'] <= (int) ($vars['warn_days'] ?: 30)) {
-        $result['messages'][] = ['warning', 'Certificate còn ' . $result['days_left'] . ' ngày. Cần gia hạn.'];
+        $result['messages'][] = ['warning', 'Certificate còn ' . $result['days_left'] . ' ngày. Cần gia hạn.'
+            . ' / Certificate expires in ' . $result['days_left'] . ' days. Renewal needed.'];
     } else {
-        $result['messages'][] = ['success', 'Certificate còn hiệu lực ' . $result['days_left'] . ' ngày.'];
+        $result['messages'][] = ['success', 'Certificate còn hiệu lực ' . $result['days_left'] . ' ngày.'
+            . ' / Certificate valid for ' . $result['days_left'] . ' more days.'];
     }
 
-    // Đối chiếu key
+    // Đối chiếu key / Key check
     $keyPath = trim((string) ($vars['key_path'] ?? ''));
     if ($keyPath !== '') {
         if (!is_readable($keyPath)) {
-            $result['messages'][] = ['danger', 'Không đọc được private key: ' . $keyPath];
+            $result['messages'][] = ['danger', 'Không đọc được private key: ' . $keyPath . ' / Cannot read private key: ' . $keyPath];
         } else {
-            $result['messages'][] = ['info', 'Private key đọc được (không kiểm tra passphrase tại đây).'];
+            $result['messages'][] = ['info', 'Private key đọc được (không kiểm tra passphrase tại đây). / Private key is readable (passphrase not checked here).'];
         }
     }
 
-    // Chuỗi CA
+    // Chuỗi CA / CA chain
     $caPath = trim((string) ($vars['ca_path'] ?? ''));
     if ($caPath !== '') {
         if (!is_readable($caPath)) {
-            $result['messages'][] = ['danger', 'Không đọc được CA chain: ' . $caPath];
+            $result['messages'][] = ['danger', 'Không đọc được CA chain: ' . $caPath . ' / Cannot read CA chain: ' . $caPath];
         } else {
             $raw = file_get_contents($caPath);
             preg_match_all('/-----BEGIN CERTIFICATE-----.*?-----END CERTIFICATE-----/s', $raw, $m);
@@ -195,13 +202,15 @@ function smimemonitor_certInfo(array $vars)
                 }
             }
             if (count($result['chain']) === 0) {
-                $result['messages'][] = ['danger', 'CA chain không chứa certificate nào.'];
+                $result['messages'][] = ['danger', 'CA chain không chứa certificate nào. / CA chain contains no certificate.'];
             } elseif ($hasLeaf) {
                 $result['messages'][] = ['warning',
-                    'CA chain đang chứa cả cert của bạn. Nên bỏ cert leaf, chỉ giữ cert CA.'];
+                    'CA chain đang chứa cả cert của bạn. Nên bỏ cert leaf, chỉ giữ cert CA. '
+                    . '/ The CA chain also contains your own cert. Remove the leaf cert, keep CA certs only.'];
             } else {
                 $result['messages'][] = ['success',
-                    'CA chain có ' . count($result['chain']) . ' certificate CA.'];
+                    'CA chain có ' . count($result['chain']) . ' certificate CA. '
+                    . '/ CA chain has ' . count($result['chain']) . ' CA certificates.'];
             }
         }
     }
@@ -216,7 +225,7 @@ function smimemonitor_output($vars)
     $action = $_GET['action'] ?? 'overview';
 
     echo '<ul class="nav nav-tabs admin-tabs">';
-    foreach (['overview' => 'Tổng quan', 'log' => 'Nhật ký', 'tools' => 'Công cụ'] as $k => $label) {
+    foreach (['overview' => 'Tổng quan / Overview', 'log' => 'Nhật ký / Log', 'tools' => 'Công cụ / Tools'] as $k => $label) {
         $active = $action === $k ? ' class="active"' : '';
         echo '<li' . $active . '><a href="' . $modulelink . '&action=' . $k . '">' . $label . '</a></li>';
     }
@@ -244,13 +253,13 @@ function smimemonitor_pageOverview($vars)
     if ($info['ok']) {
         echo '<table class="table table-bordered" style="max-width:800px;">';
         $rows = [
-            'Tổ chức' => $info['subject'],
+            'Tổ chức / Organization' => $info['subject'],
             'Email (SAN)' => $info['email'],
-            'Cấp bởi' => $info['issuer'],
-            'Hiệu lực từ' => $info['valid_from'],
-            'Hết hạn' => $info['valid_to'],
-            'Còn lại' => $info['days_left'] . ' ngày',
-            'Chuỗi CA' => implode(' → ', $info['chain']),
+            'Cấp bởi / Issued by' => $info['issuer'],
+            'Hiệu lực từ / Valid from' => $info['valid_from'],
+            'Hết hạn / Expires' => $info['valid_to'],
+            'Còn lại / Remaining' => $info['days_left'] . ' ngày / ' . $info['days_left'] . ' days',
+            'Chuỗi CA / CA chain' => implode(' → ', $info['chain']),
         ];
         foreach ($rows as $k => $v) {
             echo '<tr><th style="width:200px;">' . $k . '</th><td>'
@@ -259,7 +268,7 @@ function smimemonitor_pageOverview($vars)
         echo '</table>';
     }
 
-    // Thống kê 7 ngày
+    // Thống kê 7 ngày / 7-day statistics
     try {
         $since = date('Y-m-d H:i:s', strtotime('-7 days'));
         $total = Capsule::table('mod_smime_log')->where('sent_at', '>=', $since)->count();
@@ -268,13 +277,13 @@ function smimemonitor_pageOverview($vars)
         $failed = Capsule::table('mod_smime_log')->where('sent_at', '>=', $since)
             ->where('status', 'failed')->count();
 
-        echo '<h3>7 ngày gần nhất</h3>';
+        echo '<h3>7 ngày gần nhất / Last 7 days</h3>';
         echo '<div class="row">';
         $cards = [
-            ['Tổng mail', $total, 'default'],
-            ['Đã ký', $signed, 'success'],
-            ['Không ký', $total - $signed, 'warning'],
-            ['Thất bại', $failed, $failed > 0 ? 'danger' : 'default'],
+            ['Tổng mail / Total mail', $total, 'default'],
+            ['Đã ký / Signed', $signed, 'success'],
+            ['Không ký / Unsigned', $total - $signed, 'warning'],
+            ['Thất bại / Failed', $failed, $failed > 0 ? 'danger' : 'default'],
         ];
         foreach ($cards as $c) {
             echo '<div class="col-sm-3"><div class="panel panel-' . $c[2] . '">'
@@ -286,10 +295,12 @@ function smimemonitor_pageOverview($vars)
 
         if ($total > 0 && $signed < $total) {
             echo '<div class="alert alert-info">Mail không ký thường do địa chỉ From không khớp '
-                . 'ô "Chỉ ký khi From là" trong Mail Provider.</div>';
+                . 'ô "Chỉ ký khi From là" trong Mail Provider. '
+                . '/ Unsigned mail is usually because the From address does not match '
+                . '"Sign only when From is" in the Mail Provider.</div>';
         }
     } catch (\Exception $e) {
-        echo '<div class="alert alert-warning">Chưa có dữ liệu log.</div>';
+        echo '<div class="alert alert-warning">Chưa có dữ liệu log. / No log data yet.</div>';
     }
 }
 
@@ -300,8 +311,8 @@ function smimemonitor_pageLog($vars)
     $page = max(1, (int) ($_GET['p'] ?? 1));
     $perPage = 50;
 
-    echo '<div style="margin-bottom:10px;">Lọc: ';
-    foreach (['all' => 'Tất cả', 'signed' => 'Đã ký', 'unsigned' => 'Không ký', 'failed' => 'Thất bại'] as $k => $l) {
+    echo '<div style="margin-bottom:10px;">Lọc: / Filter: ';
+    foreach (['all' => 'Tất cả / All', 'signed' => 'Đã ký / Signed', 'unsigned' => 'Không ký / Unsigned', 'failed' => 'Thất bại / Failed'] as $k => $l) {
         $style = $filter === $k ? 'btn-primary' : 'btn-default';
         echo '<a class="btn btn-xs ' . $style . '" href="' . $modulelink
             . '&action=log&filter=' . $k . '">' . $l . '</a> ';
@@ -323,21 +334,21 @@ function smimemonitor_pageLog($vars)
             ->skip(($page - 1) * $perPage)->take($perPage)->get();
 
         echo '<table class="datatable table table-striped"><thead><tr>'
-            . '<th>Thời gian</th><th>Từ</th><th>Đến</th><th>Tiêu đề</th>'
-            . '<th>Ký</th><th>Trạng thái</th></tr></thead><tbody>';
+            . '<th>Thời gian / Time</th><th>Từ / From</th><th>Đến / To</th><th>Tiêu đề / Subject</th>'
+            . '<th>Ký / Signed</th><th>Trạng thái / Status</th></tr></thead><tbody>';
 
         if (count($rows) === 0) {
-            echo '<tr><td colspan="6">Chưa có bản ghi nào.</td></tr>';
+            echo '<tr><td colspan="6">Chưa có bản ghi nào. / No records yet.</td></tr>';
         }
 
         foreach ($rows as $r) {
             $sign = $r->signed
-                ? '<span class="label label-success">Có</span>'
-                : '<span class="label label-default">Không</span>';
+                ? '<span class="label label-success">Có / Yes</span>'
+                : '<span class="label label-default">Không / No</span>';
             $st = $r->status === 'failed'
                 ? '<span class="label label-danger" title="' . htmlspecialchars((string) $r->error)
-                    . '">Thất bại</span>'
-                : '<span class="label label-success">Đã gửi</span>';
+                    . '">Thất bại / Failed</span>'
+                : '<span class="label label-success">Đã gửi / Sent</span>';
             echo '<tr>'
                 . '<td>' . htmlspecialchars($r->sent_at) . '</td>'
                 . '<td>' . htmlspecialchars((string) $r->from_email) . '</td>'
@@ -365,6 +376,8 @@ function smimemonitor_pageLog($vars)
         }
     } catch (\Exception $e) {
         echo '<div class="alert alert-danger">Lỗi đọc log: '
+            . htmlspecialchars($e->getMessage())
+            . ' / Error reading log: '
             . htmlspecialchars($e->getMessage()) . '</div>';
     }
 }
@@ -373,7 +386,7 @@ function smimemonitor_pageTools($vars)
 {
     $modulelink = $vars['modulelink'];
 
-    // Xoá log cũ
+    // Xoá log cũ / Purge old logs
     if (($_GET['do'] ?? '') === 'purge') {
         $days = (int) ($vars['log_days'] ?: 90);
         try {
@@ -381,15 +394,16 @@ function smimemonitor_pageTools($vars)
                 ->where('sent_at', '<', date('Y-m-d H:i:s', strtotime("-{$days} days")))
                 ->delete();
             echo '<div class="alert alert-success">Đã xoá ' . $n . ' bản ghi cũ hơn '
-                . $days . ' ngày.</div>';
+                . $days . ' ngày. / Deleted ' . $n . ' records older than '
+                . $days . ' days.</div>';
         } catch (\Exception $e) {
             echo '<div class="alert alert-danger">' . htmlspecialchars($e->getMessage()) . '</div>';
         }
     }
 
-    // Ký thử
+    // Ký thử / Test signing
     if (($_GET['do'] ?? '') === 'testsign') {
-        echo '<h4>Kết quả ký thử</h4>';
+        echo '<h4>Kết quả ký thử / Test signing result</h4>';
         $cert = $vars['cert_path'];
         $key = $vars['key_path'];
         $ca = $vars['ca_path'];
@@ -397,7 +411,8 @@ function smimemonitor_pageTools($vars)
 
         if (!is_readable($cert) || !is_readable($key)) {
             echo '<div class="alert alert-danger">Không đọc được cert hoặc key. '
-                . 'Kiểm tra quyền file và quyền thư mục cha.</div>';
+                . 'Kiểm tra quyền file và quyền thư mục cha. '
+                . '/ Cannot read the cert or key. Check file and parent-directory permissions.</div>';
         } else {
             $pkey = @openssl_pkey_get_private('file://' . $key, $pass);
             if ($pkey === false) {
@@ -406,7 +421,8 @@ function smimemonitor_pageTools($vars)
                     $errs[] = $e;
                 }
                 echo '<div class="alert alert-danger">Không mở được private key — '
-                    . 'thường do sai passphrase.<br><small>'
+                    . 'thường do sai passphrase. '
+                    . '/ Cannot open the private key — usually a wrong passphrase.<br><small>'
                     . htmlspecialchars(implode(' | ', $errs)) . '</small></div>';
             } else {
                 $in = tempnam(sys_get_temp_dir(), 'smi');
@@ -418,13 +434,15 @@ function smimemonitor_pageTools($vars)
                 );
                 if ($ok) {
                     echo '<div class="alert alert-success">Ký thành công. '
-                        . 'Cấu hình chứng chỉ hoạt động tốt.</div>';
+                        . 'Cấu hình chứng chỉ hoạt động tốt. '
+                        . '/ Signing successful. The certificate configuration works well.</div>';
                 } else {
                     $errs = [];
                     while ($e = openssl_error_string()) {
                         $errs[] = $e;
                     }
-                    echo '<div class="alert alert-danger">Ký thất bại.<br><small>'
+                    echo '<div class="alert alert-danger">Ký thất bại. '
+                        . '/ Signing failed.<br><small>'
                         . htmlspecialchars(implode(' | ', $errs)) . '</small></div>';
                 }
                 @unlink($in);
@@ -433,28 +451,29 @@ function smimemonitor_pageTools($vars)
         }
     }
 
-    echo '<h4>Ký thử</h4>';
+    echo '<h4>Ký thử / Test signing</h4>';
     echo '<form method="post" action="' . $modulelink . '&action=tools&do=testsign">'
-        . '<div class="form-group"><label>Passphrase của private key</label>'
+        . '<div class="form-group"><label>Passphrase của private key / Private key passphrase</label>'
         . '<input type="password" name="keypass" class="form-control" style="max-width:300px;" '
-        . 'placeholder="Để trống nếu key không mã hoá"></div>'
-        . '<button type="submit" class="btn btn-primary">Ký thử</button></form>';
+        . 'placeholder="Để trống nếu key không mã hoá / Leave empty if the key is not encrypted"></div>'
+        . '<button type="submit" class="btn btn-primary">Ký thử / Test signing</button></form>';
 
-    echo '<hr><h4>Dọn nhật ký</h4>';
-    echo '<p>Xoá các bản ghi cũ hơn ' . (int) ($vars['log_days'] ?: 90) . ' ngày.</p>';
+    echo '<hr><h4>Dọn nhật ký / Purge log</h4>';
+    echo '<p>Xoá các bản ghi cũ hơn ' . (int) ($vars['log_days'] ?: 90) . ' ngày. '
+        . '/ Delete records older than ' . (int) ($vars['log_days'] ?: 90) . ' days.</p>';
     echo '<a class="btn btn-warning" href="' . $modulelink . '&action=tools&do=purge" '
-        . 'onclick="return confirm(\'Xác nhận xoá log cũ?\')">Dọn ngay</a>';
+        . 'onclick="return confirm(\'Xác nhận xoá log cũ? / Delete old logs?\')">Dọn ngay / Purge now</a>';
 
-    echo '<hr><h4>Thông tin môi trường</h4>';
+    echo '<hr><h4>Thông tin môi trường / Environment info</h4>';
     echo '<table class="table table-bordered" style="max-width:700px;">';
     echo '<tr><th style="width:250px;">OpenSSL</th><td>' . OPENSSL_VERSION_TEXT . '</td></tr>';
     echo '<tr><th>PHP</th><td>' . PHP_VERSION . '</td></tr>';
-    echo '<tr><th>User chạy PHP</th><td>'
+    echo '<tr><th>User chạy PHP / PHP user</th><td>'
         . htmlspecialchars(function_exists('posix_getpwuid') && function_exists('posix_geteuid')
             ? (posix_getpwuid(posix_geteuid())['name'] ?? '?') : '?')
         . '</td></tr>';
     $ob = ini_get('open_basedir');
     echo '<tr><th>open_basedir</th><td>'
-        . ($ob ? htmlspecialchars($ob) : '<em>không bật</em>') . '</td></tr>';
+        . ($ob ? htmlspecialchars($ob) : '<em>không bật / not enabled</em>') . '</td></tr>';
     echo '</table>';
 }

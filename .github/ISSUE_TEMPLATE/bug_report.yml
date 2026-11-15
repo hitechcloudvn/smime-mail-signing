@@ -1,80 +1,82 @@
-name: Báo lỗi
-description: Báo cáo sự cố khi cài đặt hoặc vận hành
+name: Báo lỗi / Bug report
+description: Báo cáo sự cố khi cài đặt hoặc vận hành / Report a problem during setup or operation
 title: "[Bug] "
 labels: ["bug", "triage"]
 body:
   - type: markdown
     attributes:
       value: |
-        Cảm ơn bạn đã báo lỗi.
+        Cảm ơn bạn đã báo lỗi. / Thank you for the report.
 
-        **Trước khi gửi**, vui lòng xem [XU-LY-LOI.md](../blob/main/docs/XU-LY-LOI.md) — phần lớn lỗi thường gặp đã có sẵn cách xác minh nguyên nhân.
+        **Trước khi gửi**, vui lòng xem [Xử lý lỗi](https://github.com/hitechcloudvn/smime-mail-signing/blob/main/docs/vi/xu-ly-loi.md) — phần lớn lỗi thường gặp đã có sẵn cách xác minh nguyên nhân.
 
-        > **KHÔNG dán khoá riêng, passphrase, hoặc nội dung file .key/.pfx vào đây.**
-        > Lỗi bảo mật gửi riêng tới info@photuesoftware.com.
+        **Before submitting**, please check the [Troubleshooting guide](https://github.com/hitechcloudvn/smime-mail-signing/blob/main/docs/en/troubleshooting.md) — most common errors already have root-cause checks listed.
+
+        > **KHÔNG dán khoá riêng, passphrase, hoặc nội dung file .key/.pfx vào đây. / NEVER paste private keys, passphrases, or .key/.pfx contents here.**
+        > Lỗi bảo mật gửi riêng tới info@photuesoftware.com. / Send security issues privately to info@photuesoftware.com.
 
   - type: dropdown
     id: platform
     attributes:
-      label: Nền tảng
+      label: Nền tảng / Platform
       options:
         - WHMCS
         - HostBill
         - Script (smime-setup.sh / smime-check.sh)
-        - Tài liệu
+        - Tài liệu / Documentation
     validations:
       required: true
 
   - type: dropdown
     id: component
     attributes:
-      label: Thành phần
+      label: Thành phần / Component
       options:
         - Mail Provider (smimesmtp)
-        - Addon giám sát (smimemonitor)
-        - Chuẩn bị chứng chỉ
-        - Khác
+        - Addon giám sát (smimemonitor) / Monitoring add-on (smimemonitor)
+        - Chuẩn bị chứng chỉ / Certificate preparation
+        - Khác / Other
     validations:
       required: true
 
   - type: textarea
     id: description
     attributes:
-      label: Mô tả sự cố
-      description: Chuyện gì xảy ra, và bạn mong đợi điều gì
+      label: Mô tả sự cố / Description
+      description: Chuyện gì xảy ra, và bạn mong đợi điều gì / What happened, and what did you expect
     validations:
       required: true
 
   - type: textarea
     id: steps
     attributes:
-      label: Các bước tái hiện
+      label: Các bước tái hiện / Steps to reproduce
       placeholder: |
-        1. Vào Settings → ...
-        2. Điền ...
-        3. Bấm validate
-        4. Xuất hiện lỗi ...
+        1. Vào Settings → ... / Go to Settings → ...
+        2. Điền ... / Fill in ...
+        3. Bấm validate / Click validate
+        4. Xuất hiện lỗi ... / Error ... appears
     validations:
       required: true
 
   - type: textarea
     id: error
     attributes:
-      label: Thông báo lỗi
-      description: Dán nguyên văn, che bớt tên miền và email nội bộ nếu cần
+      label: Thông báo lỗi / Error message
+      description: Dán nguyên văn, che bớt tên miền và email nội bộ nếu cần / Paste verbatim; mask internal domains and emails if needed
       render: text
 
   - type: textarea
     id: diagnostic
     attributes:
-      label: Kết quả chẩn đoán
-      description: "Chạy `./scripts/smime-check.sh /duong/dan/thu-muc-smime` và dán kết quả"
+      label: Kết quả chẩn đoán / Diagnostic output
+      description: "Chạy `./scripts/smime-check.sh /duong/dan/thu-muc-smime` và dán kết quả / Run `./scripts/smime-check.sh /path/to/smime-dir` and paste the output"
       render: text
 
   - type: input
     id: versions
     attributes:
-      label: Phiên bản
+      label: Phiên bản / Versions
       placeholder: "WHMCS 8.11, PHP 8.2, OpenSSL 3.0.13, Ubuntu 24.04"
     validations:
       required: true
@@ -82,9 +84,9 @@ body:
   - type: checkboxes
     id: checklist
     attributes:
-      label: Xác nhận
+      label: Xác nhận / Confirmation
       options:
-        - label: Tôi đã đọc XU-LY-LOI.md và không tìm thấy cách xử lý
+        - label: Tôi đã đọc tài liệu Xử lý lỗi và không tìm thấy cách xử lý / I have read the Troubleshooting guide and found no fix there
           required: true
-        - label: Tôi KHÔNG dán khoá riêng hay passphrase vào issue này
+        - label: Tôi KHÔNG dán khoá riêng hay passphrase vào issue này / I did NOT paste any private key or passphrase into this issue
           required: true

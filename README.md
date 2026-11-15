@@ -4,9 +4,11 @@
 
 **Ký số S/MIME cho mail gửi đi từ WHMCS và HostBill**
 
+**Tiếng Việt** | [English](README.en.md)
+
 [![License](https://img.shields.io/badge/License-Source--Available%20Non--Commercial-red?style=flat-square)](LICENSE)
-[![WHMCS](https://img.shields.io/badge/WHMCS-8.0%2B-0073AA?style=flat-square)](docs/HUONG-DAN-WHMCS.md)
-[![HostBill](https://img.shields.io/badge/HostBill-Supported-00A4E4?style=flat-square)](docs/HUONG-DAN-HOSTBILL.md)
+[![WHMCS](https://img.shields.io/badge/WHMCS-8.0%2B-0073AA?style=flat-square)](docs/vi/huong-dan-whmcs.md)
+[![HostBill](https://img.shields.io/badge/HostBill-Supported-00A4E4?style=flat-square)](docs/vi/huong-dan-hostbill.md)
 [![PHP](https://img.shields.io/badge/PHP-7.4%2B-777BB4?style=flat-square&logo=php&logoColor=white)](https://www.php.net)
 [![Made in Vietnam](https://img.shields.io/badge/Made%20in-Vietnam-DA251D?style=flat-square)](https://hitechcloud.vn)
 
@@ -38,8 +40,8 @@ Gói bao gồm tài liệu triển khai đầy đủ từ khâu tạo CSR, scrip
 
 | Nền tảng | Cách triển khai | Tài liệu |
 |---|---|---|
-| **WHMCS 8.0+** | Mail Provider module + Addon giám sát (có trong repo) | [HUONG-DAN-WHMCS.md](docs/HUONG-DAN-WHMCS.md) |
-| **HostBill** | Plugin `Smime_mail_sign` có sẵn, chỉ cần cấu hình | [HUONG-DAN-HOSTBILL.md](docs/HUONG-DAN-HOSTBILL.md) |
+| **WHMCS 8.0+** | Mail Provider module + Addon giám sát (có trong repo) | [Hướng dẫn WHMCS](docs/vi/huong-dan-whmcs.md) |
+| **HostBill** | Plugin `Smime_mail_sign` có sẵn, chỉ cần cấu hình | [Hướng dẫn HostBill](docs/vi/huong-dan-hostbill.md) |
 
 WHMCS không có sẵn chức năng ký S/MIME và hook `EmailPreSend` không làm được việc này — hook chạy trước khi message được dựng thành MIME. Vì vậy repo cung cấp một Mail Provider module theo `SenderModuleInterface` của WHMCS 8.
 
@@ -47,17 +49,25 @@ WHMCS không có sẵn chức năng ký S/MIME và hook `EmailPreSend` không l�
 
 ```
 .
-├── docs/                          Tài liệu triển khai
-│   ├── CHUAN-BI-CHUNG-CHI.md      Từ CSR đến file dùng được (đọc trước)
-│   ├── HUONG-DAN-WHMCS.md         Cài module cho WHMCS
-│   ├── HUONG-DAN-HOSTBILL.md      Cấu hình plugin HostBill
-│   └── XU-LY-LOI.md               Bảng tra lỗi
+├── docs/
+│   ├── vi/                          Tài liệu tiếng Việt
+│   │   ├── chuan-bi-chung-chi.md    Từ CSR đến file dùng được (đọc trước)
+│   │   ├── huong-dan-whmcs.md       Cài module cho WHMCS
+│   │   ├── huong-dan-hostbill.md    Cấu hình plugin HostBill
+│   │   └── xu-ly-loi.md             Bảng tra lỗi
+│   └── en/                          English documentation
+│       ├── certificate-preparation.md
+│       ├── whmcs-guide.md
+│       ├── hostbill-guide.md
+│       └── troubleshooting.md
 ├── scripts/
-│   ├── smime-setup.sh             Xử lý file CA gửi về thành 3 file dùng được
-│   └── smime-check.sh             Chẩn đoán cấu hình
-└── src/whmcs/modules/
-    ├── mail/smimesmtp/            Mail Provider: SMTP + ký S/MIME
-    └── addons/smimemonitor/       Addon giám sát chứng chỉ và nhật ký
+│   ├── smime-setup.sh               Xử lý file CA gửi về thành 3 file dùng được
+│   └── smime-check.sh               Chẩn đoán cấu hình
+└── src/
+    ├── whmcs/modules/
+    │   ├── mail/smimesmtp/          Mail Provider: SMTP + ký S/MIME
+    │   └── addons/smimemonitor/     Addon giám sát chứng chỉ và nhật ký
+    └── hostbill/                    Chỉ tài liệu — plugin có sẵn của HostBill
 ```
 
 ## Yêu cầu
@@ -73,7 +83,7 @@ WHMCS không có sẵn chức năng ký S/MIME và hook `EmailPreSend` không l�
 ### 1. Chuẩn bị chứng chỉ
 
 ```bash
-git clone https://github.com/hitechcloud-vietnam/smime-mail-signing.git
+git clone https://github.com/hitechcloudvn/smime-mail-signing.git
 cd smime-mail-signing
 chmod +x scripts/*.sh
 
@@ -82,7 +92,7 @@ chmod +x scripts/*.sh
 
 Script tự động phân loại chứng chỉ, đối chiếu khoá với chứng chỉ, tạo khoá có passphrase và ký thử. Kết quả là ba file: `smime.crt`, `ca-chain.pem`, `smime-hb.key`.
 
-Chi tiết từng bước, kể cả khi làm thủ công: [docs/CHUAN-BI-CHUNG-CHI.md](docs/CHUAN-BI-CHUNG-CHI.md)
+Chi tiết từng bước, kể cả khi làm thủ công: [Chuẩn bị chứng chỉ](docs/vi/chuan-bi-chung-chi.md)
 
 ### 2. Phân quyền
 
@@ -120,10 +130,16 @@ Gửi mail test, mở ở Gmail → Show original, cần thấy `Content-Type: m
 
 | Tài liệu | Nội dung |
 |---|---|
-| [CHUAN-BI-CHUNG-CHI.md](docs/CHUAN-BI-CHUNG-CHI.md) | Tạo CSR, xác thực tổ chức, xử lý file CA gửi về, phân quyền, bảo mật |
-| [HUONG-DAN-WHMCS.md](docs/HUONG-DAN-WHMCS.md) | Cài Mail Provider và Addon, giải thích từng ô cấu hình |
-| [HUONG-DAN-HOSTBILL.md](docs/HUONG-DAN-HOSTBILL.md) | Bật và cấu hình plugin sẵn có, cron cảnh báo hết hạn |
-| [XU-LY-LOI.md](docs/XU-LY-LOI.md) | Tra lỗi theo thông báo, kèm cách xác minh nguyên nhân |
+| [Chuẩn bị chứng chỉ](docs/vi/chuan-bi-chung-chi.md) | Tạo CSR, xác thực tổ chức, xử lý file CA gửi về, phân quyền, bảo mật |
+| [Hướng dẫn WHMCS](docs/vi/huong-dan-whmcs.md) | Cài Mail Provider và Addon, giải thích từng ô cấu hình |
+| [Hướng dẫn HostBill](docs/vi/huong-dan-hostbill.md) | Bật và cấu hình plugin sẵn có, cron cảnh báo hết hạn |
+| [Xử lý lỗi](docs/vi/xu-ly-loi.md) | Tra lỗi theo thông báo, kèm cách xác minh nguyên nhân |
+
+Bản tiếng Anh của tài liệu nằm trong [docs/en/](README.en.md).
+
+## Phát hành
+
+Mọi bản release và tag được **GitHub Actions** đóng gói và phát hành tự động — repo không yêu cầu build ở máy cục bộ. Xem [CHANGELOG.md](CHANGELOG.md) để biết nội dung từng phiên bản.
 
 ## Giấy phép
 
@@ -160,7 +176,7 @@ Phát hiện lỗ hổng? Báo riêng tư tới [info@photuesoftware.com](mailto
 | Website | [hitechcloud.vn](https://hitechcloud.vn) · [photuesoftware.com](https://photuesoftware.com) |
 | Email | [info@photuesoftware.com](mailto:info@photuesoftware.com) |
 | Zalo OA | [oa.zalo.me/2386540850578657637](https://oa.zalo.me/2386540850578657637) |
-| Báo lỗi | [GitHub Issues](https://github.com/hitechcloud-vietnam/smime-mail-signing/issues) |
+| Báo lỗi | [GitHub Issues](https://github.com/hitechcloudvn/smime-mail-signing/issues) |
 
 ---
 
