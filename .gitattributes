@@ -1,0 +1,11 @@
+* text=auto eol=lf
+
+*.php   text diff=php
+*.sh    text eol=lf
+*.md    text
+*.png   binary
+*.jpg   binary
+*.zip   binary
+
+# Không tính vào thống kê ngôn ngữ
+docs/**   linguist-documentation

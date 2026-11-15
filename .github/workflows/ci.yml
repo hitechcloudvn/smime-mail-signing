@@ -1,0 +1,104 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  php-lint:
+    name: PHP Lint (${{ matrix.php }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ['7.4', '8.0', '8.1', '8.2', '8.3']
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Cài PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: openssl
+          coverage: none
+
+      - name: Kiểm tra cú pháp
+        run: |
+          find src -name '*.php' -print0 \
+            | xargs -0 -n1 -P4 php -l
+
+      - name: Xác nhận extension openssl
+        run: php -r 'exit(extension_loaded("openssl") ? 0 : 1);'
+
+  shell-lint:
+    name: Shell Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Kiểm tra cú pháp bash
+        run: |
+          for f in scripts/*.sh; do
+            bash -n "$f" && echo "OK  $f"
+          done
+
+      - name: ShellCheck
+        uses: ludeeus/action-shellcheck@master
+        with:
+          scandir: ./scripts
+          severity: warning
+
+  secret-scan:
+    name: Quét vật liệu mã hoá
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Chặn khoá riêng và chứng chỉ lọt vào repo
+        run: |
+          FOUND=$(find . -path ./.git -prune -o \
+            \( -name '*.key' -o -name '*.pem' -o -name '*.pfx' \
+               -o -name '*.p12' -o -name '*.crt' -o -name '*.p7b' \) -print)
+          if [ -n "$FOUND" ]; then
+            echo "::error::Phát hiện file chứng chỉ/khoá trong repo:"
+            echo "$FOUND"
+            exit 1
+          fi
+          echo "Sạch — không có vật liệu mã hoá."
+
+      - name: Chặn khối PRIVATE KEY trong mã nguồn
+        run: |
+          if grep -rIl -- '-----BEGIN .*PRIVATE KEY-----' \
+               --exclude-dir=.git . ; then
+            echo "::error::Phát hiện khối PRIVATE KEY trong file trên."
+            exit 1
+          fi
+          echo "Sạch — không có khối private key."
+
+  docs:
+    name: Kiểm tra liên kết tài liệu
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Kiểm tra liên kết nội bộ
+        run: |
+          STATUS=0
+          while IFS= read -r line; do
+            file="${line%%:*}"
+            link="${line#*:}"
+            dir=$(dirname "$file")
+            target="$dir/$link"
+            if [ ! -e "$target" ]; then
+              echo "::error file=$file::Liên kết hỏng -> $link"
+              STATUS=1
+            fi
+          done < <(grep -roP '(?<=\]\()[^)#:]+\.md(?=\))' --include='*.md' . \
+                   | grep -v '^./.git')
+          exit $STATUS

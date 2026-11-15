@@ -1,0 +1,223 @@
+HiTechCloud Source-Available License (Non-Commercial)
+Version 1.0 — 2026
+
+Copyright (c) 2026 Pho Tue Software Solutions Joint Stock Company
+(Công ty Cổ phần Giải pháp Phần mềm và Công nghệ Phổ Tuệ)
+Business Registration No. / Mã số doanh nghiệp: 0318222903
+Brand / Thương hiệu: HiTechCloud
+Website: https://hitechcloud.vn — https://photuesoftware.com
+Contact: info@photuesoftware.com
+
+All rights reserved.
+
+================================================================================
+ENGLISH
+================================================================================
+
+1. DEFINITIONS
+
+   "Software" means the source code, scripts, documentation, and all other
+   materials contained in this repository.
+
+   "Licensor" means Pho Tue Software Solutions Joint Stock Company.
+
+   "You" means the individual or legal entity exercising rights under this
+   License.
+
+   "Commercial Use" means any use of the Software that is primarily intended
+   for or directed toward commercial advantage or monetary compensation,
+   including but not limited to:
+     (a) selling, licensing, sublicensing, renting, or leasing the Software
+         or any derivative work thereof;
+     (b) distributing the Software as part of a paid product, paid service,
+         paid support offering, or paid consulting engagement;
+     (c) incorporating the Software into a commercial product offered to
+         third parties;
+     (d) offering the Software or any derivative work as a hosted or managed
+         service to third parties;
+     (e) using the Software in a service for which You charge third parties,
+         where the Software forms a material part of the value delivered.
+
+   Operating the Software on Your own infrastructure to sign Your own
+   organization's outgoing email is NOT Commercial Use, even if Your
+   organization is a for-profit entity.
+
+2. GRANT OF RIGHTS
+
+   Subject to the terms of this License, the Licensor grants You a worldwide,
+   royalty-free, non-exclusive, non-transferable, revocable license to:
+
+     (a) use, install, and run the Software for internal purposes;
+     (b) copy the Software;
+     (c) modify the Software and create derivative works for Your own
+         internal use;
+     (d) study the Software for educational and research purposes.
+
+3. RESTRICTIONS
+
+   The following are expressly PROHIBITED without prior written permission
+   from the Licensor:
+
+     (a) COMMERCIAL USE, as defined in Section 1;
+     (b) SELLING or RESELLING the Software, in original or modified form,
+         whether standalone or bundled with other products;
+     (c) redistributing the Software publicly, including but not limited to
+         publishing on marketplaces, module directories, forums, or any
+         third-party distribution channel;
+     (d) removing, altering, or obscuring any copyright notice, license text,
+         attribution, or branding contained in the Software;
+     (e) using the names "HiTechCloud", "Pho Tue Software", or any related
+         trademark or logo to endorse or promote products derived from this
+         Software;
+     (f) sublicensing the Software to any third party.
+
+4. ATTRIBUTION
+
+   Any permitted copy or derivative work must retain this License file in
+   full, together with all copyright notices contained in the source files.
+
+5. COMMERCIAL LICENSING
+
+   If You wish to use the Software for any purpose prohibited under Section 3,
+   You must obtain a separate commercial license. Contact:
+   info@photuesoftware.com
+
+6. NO WARRANTY
+
+   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+   FITNESS FOR A PARTICULAR PURPOSE, AND NONINFRINGEMENT.
+
+   The Software performs cryptographic signing operations involving private
+   keys and certificates. You are solely responsible for the security of Your
+   cryptographic material, for verifying correct operation in Your
+   environment, and for compliance with applicable law and with the terms of
+   Your certificate authority.
+
+7. LIMITATION OF LIABILITY
+
+   IN NO EVENT SHALL THE LICENSOR BE LIABLE FOR ANY CLAIM, DAMAGES, OR OTHER
+   LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT, OR OTHERWISE, ARISING
+   FROM, OUT OF, OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+   DEALINGS IN THE SOFTWARE. THIS INCLUDES, WITHOUT LIMITATION, DAMAGES
+   ARISING FROM COMPROMISED PRIVATE KEYS, INVALID SIGNATURES, UNDELIVERED
+   EMAIL, OR CERTIFICATE EXPIRY.
+
+8. TERMINATION
+
+   This License terminates automatically and immediately if You breach any of
+   its terms. Upon termination, You must cease all use of the Software and
+   destroy all copies in Your possession.
+
+9. GOVERNING LAW
+
+   This License is governed by the laws of the Socialist Republic of Vietnam.
+   Any dispute arising from this License shall be submitted to the competent
+   courts of Ho Chi Minh City, Vietnam.
+
+================================================================================
+TIẾNG VIỆT
+================================================================================
+
+1. ĐỊNH NGHĨA
+
+   "Phần mềm" là mã nguồn, script, tài liệu và mọi tài sản khác trong kho
+   lưu trữ này.
+
+   "Bên cấp phép" là Công ty Cổ phần Giải pháp Phần mềm và Công nghệ Phổ Tuệ.
+
+   "Bạn" là cá nhân hoặc pháp nhân thực hiện các quyền theo Giấy phép này.
+
+   "Sử dụng thương mại" là việc sử dụng Phần mềm nhằm mục đích thu lợi hoặc
+   nhận thù lao, bao gồm nhưng không giới hạn ở:
+     (a) bán, cấp phép, cấp phép lại, cho thuê Phần mềm hoặc tác phẩm phái
+         sinh;
+     (b) phân phối Phần mềm như một phần của sản phẩm, dịch vụ, gói hỗ trợ
+         hoặc dịch vụ tư vấn có thu phí;
+     (c) tích hợp Phần mềm vào sản phẩm thương mại cung cấp cho bên thứ ba;
+     (d) cung cấp Phần mềm hoặc tác phẩm phái sinh dưới dạng dịch vụ lưu trữ
+         hoặc dịch vụ quản trị cho bên thứ ba;
+     (e) sử dụng Phần mềm trong một dịch vụ mà Bạn thu phí bên thứ ba, khi
+         Phần mềm cấu thành một phần giá trị đáng kể được cung cấp.
+
+   Việc vận hành Phần mềm trên hạ tầng của chính Bạn để ký mail gửi đi của
+   chính tổ chức Bạn KHÔNG phải là Sử dụng thương mại, kể cả khi tổ chức của
+   Bạn hoạt động vì lợi nhuận.
+
+2. QUYỀN ĐƯỢC CẤP
+
+   Theo các điều khoản của Giấy phép này, Bên cấp phép cấp cho Bạn quyền sử
+   dụng toàn cầu, miễn phí bản quyền, không độc quyền, không chuyển nhượng và
+   có thể thu hồi để:
+
+     (a) sử dụng, cài đặt và vận hành Phần mềm cho mục đích nội bộ;
+     (b) sao chép Phần mềm;
+     (c) sửa đổi Phần mềm và tạo tác phẩm phái sinh cho mục đích nội bộ;
+     (d) nghiên cứu Phần mềm cho mục đích giáo dục và nghiên cứu.
+
+3. CÁC HÀNH VI BỊ CẤM
+
+   Các hành vi sau đây bị CẤM TUYỆT ĐỐI nếu không có văn bản chấp thuận
+   trước từ Bên cấp phép:
+
+     (a) SỬ DỤNG THƯƠNG MẠI theo định nghĩa tại Mục 1;
+     (b) BÁN hoặc BÁN LẠI Phần mềm, ở dạng gốc hoặc đã sửa đổi, dù độc lập
+         hay đi kèm sản phẩm khác;
+     (c) phân phối lại Phần mềm ra công chúng, bao gồm đăng lên các chợ ứng
+         dụng, thư mục module, diễn đàn hoặc bất kỳ kênh phân phối nào của
+         bên thứ ba;
+     (d) gỡ bỏ, thay đổi hoặc che giấu thông báo bản quyền, nội dung giấy
+         phép, ghi nhận tác giả hoặc nhận diện thương hiệu trong Phần mềm;
+     (e) sử dụng tên "HiTechCloud", "Phổ Tuệ Software" hoặc nhãn hiệu, logo
+         liên quan để quảng bá sản phẩm phái sinh từ Phần mềm này;
+     (f) cấp phép lại Phần mềm cho bất kỳ bên thứ ba nào.
+
+4. GHI NHẬN TÁC GIẢ
+
+   Mọi bản sao hoặc tác phẩm phái sinh được phép phải giữ nguyên toàn bộ tệp
+   Giấy phép này cùng tất cả thông báo bản quyền trong các tệp mã nguồn.
+
+5. CẤP PHÉP THƯƠNG MẠI
+
+   Nếu Bạn muốn sử dụng Phần mềm cho bất kỳ mục đích nào bị cấm tại Mục 3,
+   Bạn phải có giấy phép thương mại riêng. Liên hệ: info@photuesoftware.com
+
+6. KHÔNG BẢO HÀNH
+
+   PHẦN MỀM ĐƯỢC CUNG CẤP "NGUYÊN TRẠNG", KHÔNG KÈM BẤT KỲ BẢO ĐẢM NÀO, DÙ
+   RÕ RÀNG HAY NGỤ Ý.
+
+   Phần mềm thực hiện các thao tác ký mã hoá liên quan tới khoá riêng và
+   chứng chỉ số. Bạn hoàn toàn chịu trách nhiệm về việc bảo mật vật liệu mã
+   hoá của mình, về việc kiểm chứng hoạt động đúng đắn trong môi trường của
+   mình, và về việc tuân thủ pháp luật hiện hành cũng như điều khoản của tổ
+   chức phát hành chứng chỉ.
+
+7. GIỚI HẠN TRÁCH NHIỆM
+
+   BÊN CẤP PHÉP KHÔNG CHỊU TRÁCH NHIỆM VỀ BẤT KỲ KHIẾU NẠI, THIỆT HẠI HOẶC
+   NGHĨA VỤ NÀO PHÁT SINH TỪ HOẶC LIÊN QUAN ĐẾN PHẦN MỀM, BAO GỒM NHƯNG KHÔNG
+   GIỚI HẠN Ở THIỆT HẠI DO LỘ KHOÁ RIÊNG, CHỮ KÝ KHÔNG HỢP LỆ, MAIL KHÔNG
+   ĐƯỢC GỬI, HOẶC CHỨNG CHỈ HẾT HẠN.
+
+8. CHẤM DỨT
+
+   Giấy phép này tự động chấm dứt ngay lập tức nếu Bạn vi phạm bất kỳ điều
+   khoản nào. Khi chấm dứt, Bạn phải ngừng mọi việc sử dụng Phần mềm và huỷ
+   toàn bộ bản sao đang nắm giữ.
+
+9. LUẬT ÁP DỤNG
+
+   Giấy phép này được điều chỉnh bởi pháp luật nước Cộng hoà Xã hội Chủ nghĩa
+   Việt Nam. Mọi tranh chấp phát sinh sẽ được đưa ra toà án có thẩm quyền tại
+   Thành phố Hồ Chí Minh, Việt Nam.
+
+================================================================================
+
+Đây là giấy phép nguồn-mở-có-điều-kiện (source-available), KHÔNG phải giấy
+phép mã nguồn mở theo định nghĩa của OSI, và không tương thích với GPL, MIT,
+Apache hay các giấy phép mã nguồn mở khác.
+
+This is a source-available license. It is NOT an OSI-approved open source
+license and is not compatible with GPL, MIT, Apache, or other open source
+licenses.

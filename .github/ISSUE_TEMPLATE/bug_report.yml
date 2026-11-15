@@ -1,0 +1,90 @@
+name: Báo lỗi
+description: Báo cáo sự cố khi cài đặt hoặc vận hành
+title: "[Bug] "
+labels: ["bug", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Cảm ơn bạn đã báo lỗi.
+
+        **Trước khi gửi**, vui lòng xem [XU-LY-LOI.md](../blob/main/docs/XU-LY-LOI.md) — phần lớn lỗi thường gặp đã có sẵn cách xác minh nguyên nhân.
+
+        > **KHÔNG dán khoá riêng, passphrase, hoặc nội dung file .key/.pfx vào đây.**
+        > Lỗi bảo mật gửi riêng tới info@photuesoftware.com.
+
+  - type: dropdown
+    id: platform
+    attributes:
+      label: Nền tảng
+      options:
+        - WHMCS
+        - HostBill
+        - Script (smime-setup.sh / smime-check.sh)
+        - Tài liệu
+    validations:
+      required: true
+
+  - type: dropdown
+    id: component
+    attributes:
+      label: Thành phần
+      options:
+        - Mail Provider (smimesmtp)
+        - Addon giám sát (smimemonitor)
+        - Chuẩn bị chứng chỉ
+        - Khác
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Mô tả sự cố
+      description: Chuyện gì xảy ra, và bạn mong đợi điều gì
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Các bước tái hiện
+      placeholder: |
+        1. Vào Settings → ...
+        2. Điền ...
+        3. Bấm validate
+        4. Xuất hiện lỗi ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: error
+    attributes:
+      label: Thông báo lỗi
+      description: Dán nguyên văn, che bớt tên miền và email nội bộ nếu cần
+      render: text
+
+  - type: textarea
+    id: diagnostic
+    attributes:
+      label: Kết quả chẩn đoán
+      description: "Chạy `./scripts/smime-check.sh /duong/dan/thu-muc-smime` và dán kết quả"
+      render: text
+
+  - type: input
+    id: versions
+    attributes:
+      label: Phiên bản
+      placeholder: "WHMCS 8.11, PHP 8.2, OpenSSL 3.0.13, Ubuntu 24.04"
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Xác nhận
+      options:
+        - label: Tôi đã đọc XU-LY-LOI.md và không tìm thấy cách xử lý
+          required: true
+        - label: Tôi KHÔNG dán khoá riêng hay passphrase vào issue này
+          required: true

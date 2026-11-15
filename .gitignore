@@ -1,0 +1,47 @@
+# Vật liệu mã hoá — TUYỆT ĐỐI KHÔNG COMMIT
+*.key
+*.pem
+*.crt
+*.cer
+*.p12
+*.pfx
+*.p7b
+*.p7c
+*.p7m
+*.p7s
+*.csr
+*.der
+smime/
+certs/
+
+# Cấu hình cục bộ
+.env
+.env.*
+config.local.php
+*.local
+
+# Hệ điều hành
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Trình soạn thảo
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.project
+.buildpath
+
+# PHP
+vendor/
+composer.lock
+.phpunit.result.cache
+
+# Log và tạm
+*.log
+*.tmp
+*.bak
+*.orig
+/tmp/
