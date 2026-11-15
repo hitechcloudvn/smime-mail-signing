@@ -34,7 +34,8 @@ jobs:
             | xargs -0 -n1 -P4 php -l
 
       - name: Xác nhận extension openssl / Verify openssl extension
-        run: php -r 'exit(extension_loaded("openssl") ? 0 : 1);'
+        run: |
+          php -r 'exit(extension_loaded("openssl") ? 0 : 1);'
 
   shell-lint:
     name: Shell Lint
